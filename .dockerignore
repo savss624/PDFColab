@@ -1,0 +1,40 @@
+# macOS-specific files
+**/.DS_Store
+
+# Git
+.git
+.gitignore
+.github/
+lefthook.yml
+
+# Docker
+.docker
+
+# Python
+config/__pycache__/
+apps/__pycache__/
+apps/*/__pycache__/
+apps/*/*/__pycache__/
+apps/*/*/*/__pycache__/
+
+# Dependency directories
+node_modules/
+
+# Readme
+README.md
+
+# VS Code config
+.vscode/
+
+# Environments
+.env.sample
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# PostgreSQL dump
+db.tar
