@@ -1,15 +1,19 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import Init from "@components/common/Init.jsx";
-import NotImplemented from "@components/common/NotImplemented.jsx";
 
-const DApp = () => {
-  return <div className="relative h-full"></div>;
-};
+import Headers from "@components/common/Header.jsx";
 
-const MApp = () => {
-  return <NotImplemented />;
+import Body from "@components/dashboard/Body.jsx";
+
+const App = () => {
+  return (
+    <div className="relative h-full overflow-hidden">
+      <Headers />
+      <Body />
+    </div>
+  );
 };
 
 const root = createRoot(document.getElementById("root"));
-root.render(<Init DApp={DApp} MApp={MApp} />);
+root.render(<Init App={App} />);

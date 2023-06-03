@@ -4,8 +4,10 @@ URL Mapping for the dashboard app.
 
 from django.urls import path
 
-from dashboard.views import BetaUserWaitlistAPIView
+from dashboard import views
 
 urlpatterns = [
-    path("beta-user-waitlist/", BetaUserWaitlistAPIView.as_view()),
+    path("uploadpdf/", views.PdfView.as_view(), name="upload_pdf"),
+    path("listpdf/", views.PdfView.as_view(), name="pdf_list"),
+    path("deletepdf/<str:id>/", views.PdfView.as_view(), name="delete_pdf"),
 ]

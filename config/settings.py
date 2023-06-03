@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "user",
     "dashboard",
+    "pdfviewer",
 ]
 
 MIDDLEWARE = [
@@ -148,6 +149,16 @@ MEDIA_ROOT = "/vol/web/mediafiles"
 STATICFILES_STORAGE = (
     "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 )
+
+# Email settings
+# https://docs.djangoproject.com/en/3.2/topics/email/
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

@@ -1,27 +1,40 @@
 import React from "react";
+import { useCookies } from "react-cookie";
 
-import LogoButton from "@components/common/LogoButton.jsx";
+import useAuthenticationStore from "@utils/stores/authenticationStore.js";
+
+import { UserIcon } from "@assets/svgs.js";
 
 const Header = () => {
+  const [, , removeCookie] = useCookies(["authToken"]);
+  const { currentUser } = useAuthenticationStore();
+
   return (
-    <div>
-      <div className="h-[7rem] max-h-40 bg-primary flex flex-row items-center justify-between">
-        <div className="mx-[6rem]">
-          <LogoButton />
-        </div>
-        <div className="mx-12 flex flex-row">
-          <a
-            href="/about-us"
-            className="text-[1rem] 2xl:text-[1.2rem] font-semibold text-secondary mx-12"
+    <div className="h-20 w-full flex flex-row items-center justify-between px-10">
+      <a href="/">
+        <span className="text-4xl font-bold">PDFColab</span>
+      </a>
+      <div className="w-28 flex flex-row items-center justify-between">
+        <span>Hi {currentUser.name.split(" ")[0]}</span>
+        <div className="dropdown dropdown-end">
+          <label tabIndex={0}>
+            <UserIcon />
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu shadow bg-base-100 rounded-box border"
           >
-            About Us
-          </a>
-          <a
-            href="/contact-us"
-            className="text-[1rem] 2xl:text-[1.2rem] font-semibold text-secondary mx-12"
-          >
-            Contact Us
-          </a>
+            <li>
+              <button
+                onClick={() => {
+                  removeCookie("authToken");
+                  window.location.href = "/authentication?logout=true";
+                }}
+              >
+                Logout
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
