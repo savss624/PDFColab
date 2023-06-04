@@ -97,7 +97,7 @@ class PdfInviteView(APIView):
 
         current_domain = request.META["HTTP_HOST"]
         invitation_link = (
-            f"https://{current_domain}/pdfviewer/shared/{shared_pdf.id}"
+            f"http://{current_domain}/pdfviewer/shared/{shared_pdf.id}"
         )
 
         subject = "PDFColab Invitation"

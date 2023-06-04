@@ -103,7 +103,7 @@ class ForgotPasswordView(APIView):
 
         current_domain = request.META["HTTP_HOST"]
         reset_link = (
-            f"https://{current_domain}/authentication/resetpassword"
+            f"http://{current_domain}/authentication/resetpassword"
             + f"?token={instance.token}"
         )
 
