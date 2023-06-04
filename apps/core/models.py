@@ -15,14 +15,6 @@ from django.contrib.auth.models import (
 from django.utils import timezone
 
 
-def generate_uuid():
-    """
-    Generate a UUIDs.
-    """
-
-    return uuid.uuid4().hex
-
-
 class UserManager(BaseUserManager):
     """
     Manager for Users
@@ -59,9 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     User in the system.
     """
 
-    id = models.UUIDField(
-        primary_key=True, default=generate_uuid, editable=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -85,11 +75,9 @@ class ResetPasswordToken(models.Model):
     Model for storing reset password tokens.
     """
 
-    id = models.UUIDField(
-        primary_key=True, default=generate_uuid, editable=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    token = models.CharField(max_length=255, unique=True)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expired_at = models.DateTimeField(default=default_expiry_date)
     password_changed = models.BooleanField(default=False)
@@ -111,9 +99,7 @@ class Pdf(models.Model):
     Model for storing pdfs.
     """
 
-    id = models.UUIDField(
-        primary_key=True, default=generate_uuid, editable=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     file = models.FileField(upload_to=pdf_file_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -123,9 +109,7 @@ class Pdf(models.Model):
 class SharedPdf(models.Model):
     """Model for storing shared pdfs."""
 
-    id = models.UUIDField(
-        primary_key=True, default=generate_uuid, editable=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pdf = models.ForeignKey(Pdf, on_delete=models.CASCADE)
     shared_to_name = models.CharField(max_length=255)
     shared_to_email = models.EmailField(max_length=255)
@@ -138,9 +122,7 @@ class Comments(models.Model):
     Model for storing comments.
     """
 
-    id = models.UUIDField(
-        primary_key=True, default=generate_uuid, editable=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pdf = models.ForeignKey(Pdf, on_delete=models.CASCADE)
     comment = models.TextField()
     name = models.CharField(max_length=255)
@@ -157,9 +139,7 @@ class Replies(models.Model):
     Model for storing replies.
     """
 
-    id = models.UUIDField(
-        primary_key=True, default=generate_uuid, editable=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     comment = models.ForeignKey(
         Comments, on_delete=models.CASCADE, related_name="replies"
     )

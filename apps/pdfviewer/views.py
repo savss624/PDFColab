@@ -117,14 +117,13 @@ class PdfInviteView(APIView):
             },
         )
 
-        if not settings.DEBUG:
-            send_mail(
-                subject,
-                message,
-                email_from,
-                recipient_list,
-                html_message=html_message,
-            )
+        send_mail(
+            subject,
+            message,
+            email_from,
+            recipient_list,
+            html_message=html_message,
+        )
 
         return Response({"sharedId": shared_pdf.id})
 

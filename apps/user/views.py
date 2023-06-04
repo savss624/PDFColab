@@ -2,8 +2,6 @@
 Views for user API.
 """
 
-import uuid
-
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
@@ -101,12 +99,12 @@ class ForgotPasswordView(APIView):
         if not user:
             return Response({"message": "User is not available"}, status=404)
 
-        token = uuid.uuid4().hex
+        instance = ResetPasswordToken.objects.create(user=user)
 
         current_domain = request.META["HTTP_HOST"]
         reset_link = (
             f"https://{current_domain}/authentication/resetpassword"
-            + f"?token={token}"
+            + f"?token={instance.token}"
         )
 
         subject = "Reset Password"
@@ -122,16 +120,13 @@ class ForgotPasswordView(APIView):
             },
         )
 
-        if settings.DEBUG:
-            send_mail(
-                subject,
-                message,
-                email_from,
-                recipient_list,
-                html_message=html_message,
-            )
-
-        ResetPasswordToken.objects.create(user=user, token=token)
+        send_mail(
+            subject,
+            message,
+            email_from,
+            recipient_list,
+            html_message=html_message,
+        )
 
         return Response({"message": "Recovery email sent"})
 
