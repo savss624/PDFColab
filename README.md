@@ -57,7 +57,8 @@ Authentication is required to access this app.
 ### Security Features
 
 - User passwords are hashed.
-- I am using token based authentication.
+- I am using token based authentication. And token gets saved in cookies which expires in a month on remember me.
+- Link for reseting password expires in 1 hours
 - Dashboard & PdfViewer app are protected using authentication including all functionality in them.
 - Access to SharedPdfViewer app for any pdf is controlled by the owner of the pdf.
 - Pdf url is not exposed to the user in the website to prevent unauthorized access.
