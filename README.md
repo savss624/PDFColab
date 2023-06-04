@@ -2,6 +2,8 @@
 
 PDFColab is a webapp to view pdf files & collaborate with other users.
 
+Website: [Link](http://ec2-18-142-54-33.ap-southeast-1.compute.amazonaws.com)
+
 ### Local Setup
 
 - Install [git](https://github.com/git-guides/install-git), [docker](https://docs.docker.com/get-docker/) & [docker-compose](https://docs.docker.com/compose/install/).
@@ -33,6 +35,7 @@ Authentication is required to access this app.
 
 - User can upload pdf files.
 - User can view uploaded pdf files.
+- User can search pdf files.
 
 #### PDF Viewer App
 
@@ -59,3 +62,7 @@ Authentication is required to access this app.
 - Access to SharedPdfViewer app for any pdf is controlled by the owner of the pdf.
 - Pdf url is not exposed to the user in the website to prevent unauthorized access.
 - Pdf cannot be downloaded in PdfViewer or SharedPdfViewer app.
+
+### Additional Features
+
+- Auto redirecting to authenticaion page on unauthorized access & redirect back to that page on signin.
