@@ -11,9 +11,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 const PdfReader = () => {
   const { pdfUrl, pdfName } = usePDFViewerStore();
   const [numPages, setNumPages] = useState(null);
+  const [isPdfLoaded, setIsPdfLoaded] = useState(false);
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
+    setIsPdfLoaded(true);
   }
 
   return (
@@ -36,13 +38,13 @@ const PdfReader = () => {
           />
         ))}
       </Document>
-      {!numPages && (
+      {!isPdfLoaded && (
         <div className="absolute w-full h-full bg-base-100 flex flex-col items-center justify-center">
           <LoadingIcon />
           <span className="text-md">Loading PDF...</span>
         </div>
       )}
-      {numPages && (
+      {isPdfLoaded && (
         <span className="absolute text-lg font-bold inset-6 text-base-100 h-min w-min whitespace-nowrap">
           {pdfName}.pdf
         </span>
