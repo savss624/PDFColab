@@ -8,7 +8,9 @@ from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for user object."""
+    """
+    Serializer for user object.
+    """
 
     class Meta:
         model = get_user_model()
@@ -16,11 +18,17 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True, "min_length": 5}}
 
     def create(self, validated_data):
-        """Create and return user with encrypted password."""
+        """
+        Create and return user with encrypted password.
+        """
+
         return get_user_model().objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
-        """Update and return user."""
+        """
+        Update and return user.
+        """
+
         password = validated_data.pop("password", None)
         user = super().update(instance, validated_data)
 
@@ -32,7 +40,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class AuthTokenSerializer(serializers.Serializer):
-    """Serializer for user auth token."""
+    """
+    Serializer for user auth token.
+    """
 
     email = serializers.EmailField()
     password = serializers.CharField(
@@ -40,7 +50,10 @@ class AuthTokenSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        """Validate and authenticate user."""
+        """
+        Validate and authenticate user.
+        """
+
         email = attrs.get("email")
         password = attrs.get("password")
         user = authenticate(

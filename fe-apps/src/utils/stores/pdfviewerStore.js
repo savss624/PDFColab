@@ -313,6 +313,7 @@ const useCommentsStore = create((set, get) => ({
       toast.error("Please enter a reply");
       return;
     }
+    
     fetch("/api/pdfviewer/addreply/", {
       method: "POST",
       headers: {

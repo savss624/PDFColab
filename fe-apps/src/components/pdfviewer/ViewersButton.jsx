@@ -8,7 +8,7 @@ import {
   UserIcon,
   CopyIcon,
   VerticalDotsIcon,
-} from "@assets/svgs.js";
+} from "@assets/icons.js";
 
 const ViewersButton = () => {
   const { pdfName, sharedViewers, fetchSharedViewers, revokeAccess } =
@@ -17,15 +17,17 @@ const ViewersButton = () => {
 
   return (
     <>
-      <button
-        className="btn btn-outline rounded-md w-1/5"
-        onClick={() => {
-          fetchSharedViewers();
-          setShowViewersModal(true);
-        }}
-      >
-        <ViewersIcon />
-      </button>
+      <div className="tooltip tooltip-top w-1/5" data-tip="Viewers with access">
+        <button
+          className="btn btn-outline rounded-md w-full"
+          onClick={() => {
+            fetchSharedViewers();
+            setShowViewersModal(true);
+          }}
+        >
+          <ViewersIcon />
+        </button>
+      </div>
       <dialog
         className={`modal h-screen w-screen ${
           showViewersModal && "modal-open"

@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 
 import { useShareStore } from "@utils/stores/pdfviewerStore.js";
 
-import { UserIcon, LinkIcon } from "@assets/svgs.js";
+import { UserIcon, LinkIcon } from "@assets/icons.js";
 
 const ShareButton = () => {
   const [openShareModal, setOpenShareModal] = useState(false);
@@ -24,12 +24,17 @@ const ShareButton = () => {
 
   return (
     <>
-      <button
-        className="btn btn-outline w-1/2 rounded-md"
-        onClick={() => setOpenShareModal(true)}
+      <div
+        className="tooltip tooltip-top w-1/2"
+        data-tip="Share PDF with others"
       >
-        Share
-      </button>
+        <button
+          className="btn btn-outline rounded-md w-full"
+          onClick={() => setOpenShareModal(true)}
+        >
+          Share
+        </button>
+      </div>
       <dialog
         className={`modal h-screen w-screen ${openShareModal && "modal-open"}`}
       >

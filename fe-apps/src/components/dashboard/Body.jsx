@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import useDashboardStore from "@utils/stores/dashboardStore.js";
 
-import PdfIcon from "@assets/icons/pdf.svg";
-import { LoadingIcon } from "@assets/svgs.js";
+import { PdfIcon, LoadingIcon } from "@assets/icons.js";
 
 import UploadButton from "@components/dashboard/UploadButton.jsx";
 
@@ -49,7 +48,7 @@ const Body = () => {
               className="btn btn-lg m-2 justify-start"
               onClick={() => (window.location.href = `/pdfviewer/${pdf.id}`)}
             >
-              <img src={PdfIcon} alt="pdfIcon" className="w-10 h-10" />
+              <PdfIcon />
               <span className="mx-6">{pdf.name}</span>
             </button>
           ))}

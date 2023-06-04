@@ -3,7 +3,7 @@ import { useCookies } from "react-cookie";
 
 import useAuthenticationStore from "@utils/stores/authenticationStore.js";
 
-import { UserIcon } from "@assets/svgs.js";
+import { UserIcon } from "@assets/icons.js";
 
 const Header = () => {
   const [, , removeCookie] = useCookies(["authToken"]);
@@ -16,7 +16,7 @@ const Header = () => {
       </a>
       <div className="w-28 flex flex-row items-center justify-between">
         <span>Hi {currentUser.name.split(" ")[0]}</span>
-        <div className="dropdown dropdown-end">
+        <div className="dropdown dropdown-end dropdown-hover">
           <label tabIndex={0}>
             <UserIcon />
           </label>

@@ -1,4 +1,6 @@
-"""Database Models."""
+"""
+Database Models.
+"""
 
 import os
 import uuid
@@ -14,15 +16,23 @@ from django.utils import timezone
 
 
 def generate_uuid():
-    """Generate a UUIDs."""
+    """
+    Generate a UUIDs.
+    """
+
     return uuid.uuid4().hex
 
 
 class UserManager(BaseUserManager):
-    """Manager for Users"""
+    """
+    Manager for Users
+    """
 
     def create_user(self, email, password=None, **extra_fields):
-        """create, save and return a new user."""
+        """
+        create, save and return a new user.
+        """
+
         if not email:
             raise ValueError("User must have a email address.")
         user = self.model(email=self.normalize_email(email), **extra_fields)
@@ -32,7 +42,10 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password):
-        """create, save and return new superuser."""
+        """
+        create, save and return new superuser.
+        """
+
         user = self.create_user(email, password)
         user.is_staff = True
         user.is_superuser = True
@@ -42,7 +55,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """User in the system."""
+    """
+    User in the system.
+    """
 
     id = models.UUIDField(
         primary_key=True, default=generate_uuid, editable=False
@@ -58,11 +73,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 def default_expiry_date():
+    """
+    Generate default expiry date for reset password token.
+    """
+
     return timezone.now() + datetime.timedelta(hours=1)
 
 
 class ResetPasswordToken(models.Model):
-    """Model for storing reset password tokens."""
+    """
+    Model for storing reset password tokens.
+    """
 
     id = models.UUIDField(
         primary_key=True, default=generate_uuid, editable=False
@@ -75,7 +96,10 @@ class ResetPasswordToken(models.Model):
 
 
 def pdf_file_path(instance, filename):
-    """Generate file path for new pdf."""
+    """
+    Generate file path for new pdf.
+    """
+
     ext = os.path.splitext(filename)[1]
     filename = f"{uuid.uuid4()}{ext}"
 
@@ -83,7 +107,9 @@ def pdf_file_path(instance, filename):
 
 
 class Pdf(models.Model):
-    """Model for storing pdfs."""
+    """
+    Model for storing pdfs.
+    """
 
     id = models.UUIDField(
         primary_key=True, default=generate_uuid, editable=False
@@ -108,7 +134,9 @@ class SharedPdf(models.Model):
 
 
 class Comments(models.Model):
-    """Model for storing comments."""
+    """
+    Model for storing comments.
+    """
 
     id = models.UUIDField(
         primary_key=True, default=generate_uuid, editable=False
@@ -125,7 +153,9 @@ class Comments(models.Model):
 
 
 class Replies(models.Model):
-    """Model for storing replies."""
+    """
+    Model for storing replies.
+    """
 
     id = models.UUIDField(
         primary_key=True, default=generate_uuid, editable=False

@@ -146,6 +146,7 @@ const useAuthenticationStore = create((set, get) => ({
       toast.error("Please enter a valid email address");
       return;
     }
+
     toast.promise(
       new Promise((resolve, reject) => {
         fetch("/api/user/forgotpassword/", {
@@ -186,6 +187,7 @@ const useAuthenticationStore = create((set, get) => ({
     }
     const queryParams = new URLSearchParams(window.location.search);
     const token = queryParams.get("token");
+    
     toast.promise(
       new Promise((resolve, reject) => {
         fetch("/api/user/resetpassword/", {

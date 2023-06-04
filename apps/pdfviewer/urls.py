@@ -6,6 +6,8 @@ from django.urls import path
 
 from pdfviewer import views
 
+app_name = "pdfviewer"
+
 urlpatterns = [
     path("getpdf/<str:id>/", views.PdfFileView.as_view(), name="get_pdf"),
     path(

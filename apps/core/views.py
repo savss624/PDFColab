@@ -9,9 +9,15 @@ from core.models import Pdf, SharedPdf
 
 
 class InitTemplateView(TemplateView):
-    """View for init template view."""
+    """
+    View for init template view.
+    """
 
     def get_context_data(self, **kwargs):
+        """
+        Send context data to react app.
+        """
+
         context = dict(**kwargs)
         context.update(
             {
@@ -23,17 +29,27 @@ class InitTemplateView(TemplateView):
 
 
 class Authentication(InitTemplateView):
-    """View react app for dashboard page."""
+    """
+    View react app for dashboard page.
+    """
 
     template_name = "authentication.html"
 
     def get_context_data(self, **kwargs):
+        """
+        Send context data to react app.
+        """
+
         context = dict()
         context["isAuthPage"] = True
         context["authMode"] = "signin"
         return super().get_context_data(**context)
 
     def get(self, request, *args, **kwargs):
+        """
+        Check if user is already logged in.
+        """
+
         isLogout = request.GET.get("logout", False)
         if not isLogout and request.COOKIES.get("authToken"):
             return redirect("dashboard_page")
@@ -41,17 +57,27 @@ class Authentication(InitTemplateView):
 
 
 class ResetPassword(InitTemplateView):
-    """View react app for reset password page."""
+    """
+    View react app for reset password page.
+    """
 
     template_name = "authentication.html"
 
     def get_context_data(self, **kwargs):
+        """
+        Send context data to react app.
+        """
+
         context = dict()
         context["isAuthPage"] = True
         context["authMode"] = "resetpassword"
         return super().get_context_data(**context)
 
     def get(self, request, *args, **kwargs):
+        """
+        Check if user is already logged in.
+        """
+
         token = request.GET.get("token", None)
         if not token:
             return redirect("authentication_page")
@@ -59,17 +85,25 @@ class ResetPassword(InitTemplateView):
 
 
 class Dashboard(InitTemplateView):
-    """View react app for dashboard page."""
+    """
+    View react app for dashboard page.
+    """
 
     template_name = "dashboard.html"
 
 
 class PdfViewer(InitTemplateView):
-    """View react app for pdf viewer page."""
+    """
+    View react app for pdf viewer page.
+    """
 
     template_name = "pdfviewer.html"
 
     def get_context_data(self, **kwargs):
+        """
+        Send context data to react app.
+        """
+
         context = dict()
         pdf_id = self.kwargs.get("pdfId")
         if pdf_id == "null":
@@ -80,11 +114,17 @@ class PdfViewer(InitTemplateView):
 
 
 class SharedPdfViewer(InitTemplateView):
-    """View react app for shared pdf viewer page."""
+    """
+    View react app for shared pdf viewer page.
+    """
 
     template_name = "pdfviewer.html"
 
     def get_context_data(self, **kwargs):
+        """
+        Send context data to react app.
+        """
+
         context = dict()
         shared_id = self.kwargs.get("sharedId")
         if shared_id == "null":

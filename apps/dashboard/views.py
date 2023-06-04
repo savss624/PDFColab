@@ -22,6 +22,10 @@ class PdfView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
+        """
+        Upload a pdf.
+        """
+
         if "file" not in request.FILES:
             return Response({"error": "No file was submitted."}, status=400)
 
@@ -41,6 +45,10 @@ class PdfView(APIView):
         )
 
     def get(self, request, format=None):
+        """
+        Get all pdfs.
+        """
+
         pdfs = Pdf.objects.filter(uploaded_by=request.user).order_by(
             "-uploaded_at"
         )
@@ -49,6 +57,10 @@ class PdfView(APIView):
         return Response(serializer.data, status=200)
 
     def delete(self, request, id, format=None):
+        """
+        Delete a pdf.
+        """
+
         pdf = Pdf.objects.filter(id=id).first()
         pdf.delete()
 

@@ -3,7 +3,7 @@ import { useCookies } from "react-cookie";
 
 import useAuthenticationStore from "@utils/stores/authenticationStore.js";
 
-import { VisibleIcon, HiddenIcon } from "@assets/svgs.js";
+import { VisibleIcon, HiddenIcon } from "@assets/icons.js";
 
 import Button from "@components/common/Button.jsx";
 
@@ -24,7 +24,7 @@ const SignInBox = () => {
     <div className="h-full flex flex-col items-center justify-center">
       <span className="text-4xl font-extrabold">Welcome to PDFColab</span>
       <form
-        className="form-control w-full max-w-xs my-4"
+        className="form-control w-full max-w-xs text-xl my-4"
         onSubmit={(e) => {
           e.preventDefault();
           createAuthToken(setCookie, rememberMe);

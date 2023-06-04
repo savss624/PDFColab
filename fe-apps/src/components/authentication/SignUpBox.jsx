@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import useAuthenticationStore from "@utils/stores/authenticationStore.js";
 
-import { VisibleIcon, HiddenIcon } from "@assets/svgs.js";
+import { VisibleIcon, HiddenIcon } from "@assets/icons.js";
 
 import Button from "@components/common/Button.jsx";
 

@@ -22,11 +22,17 @@ from core.models import SharedPdf, Comments, ResetPasswordToken
 
 
 class CreateUserView(generics.CreateAPIView):
-    """Create a new user in system."""
+    """
+    Create a new user in system.
+    """
 
     serializer_class = UserSerializer
 
     def post(self, request, format=None):
+        """
+        Create a new user.
+        """
+
         email = request.data["email"]
         name = request.data["name"]
         SharedPdf.objects.filter(shared_to_email=email).update(
@@ -37,14 +43,18 @@ class CreateUserView(generics.CreateAPIView):
 
 
 class CreateTokenView(ObtainAuthToken):
-    """Create a new auth token for user."""
+    """
+    Create a new auth token for user.
+    """
 
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
 class ManageUserView(generics.RetrieveUpdateAPIView):
-    """Manage the authenticated user."""
+    """
+    Manage the authenticated user.
+    """
 
     serializer_class = UserSerializer
     authentication_classes = [authentication.TokenAuthentication]
@@ -55,10 +65,18 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
 
 
 class CheckUserAvailabilityView(APIView):
+    """
+    View for checking user availability.
+    """
+
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
+        """
+        Check if user is available in db.
+        """
+
         email = request.GET.get("email", None)
         User = get_user_model()
         user = User.objects.filter(email=email).first()
@@ -68,7 +86,15 @@ class CheckUserAvailabilityView(APIView):
 
 
 class ForgotPasswordView(APIView):
+    """
+    View for forgot password.
+    """
+
     def post(self, request, format=None):
+        """
+        Send recovery email to user.
+        """
+
         email = request.data["email"]
         User = get_user_model()
         user = User.objects.filter(email=email).first()
@@ -111,7 +137,15 @@ class ForgotPasswordView(APIView):
 
 
 class ResetPasswordView(APIView):
+    """
+    View for reset password.
+    """
+
     def post(self, request, format=None):
+        """
+        Reset password.
+        """
+
         token = request.data["token"]
         password = request.data["password"]
         instance = ResetPasswordToken.objects.filter(token=token).first()

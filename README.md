@@ -1,45 +1,61 @@
-# PDFColab WebApp
+# PDFColab
+
+PDFColab is a webapp to view pdf files & collaborate with other users.
 
 ### Local Setup
 
 - Install [git](https://github.com/git-guides/install-git), [docker](https://docs.docker.com/get-docker/) & [docker-compose](https://docs.docker.com/compose/install/).
-- Install [python pip](https://www.python.org/downloads/) & [flake8](https://pypi.org/project/flake8/).
-- Install [node](https://nodejs.org/en/download/) & [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable).
-- Do `yarn install --frozen-lockfile`.
-- Run `docker-compose build` & `docker-compose up` to run the app.
-- Run `docker exec -i db_container_name pg_restore -c -U postgres -d devdb  < db.tar` parallely for populating local db using `db.tar` dump.
+- Run `docker-compose build` to build the docker image.
+- Run `docker-compose up` to start the server.
+- Open `localhost:8000` in your browser to view the app.
 
-### How to do migration ?
+### WebApp Tech Stack
 
-- Run `docker-compose up`
-- Run `docker exec -it webserver_container_name /bin/sh` parallely
-- Run `./manage.py makemigrations`
-- Run `./manage.py migrate`
+- Backend [django](https://www.djangoproject.com/) code is in `apps` folder.
+- Django settings are in `config` folder.
+- Frontend [react](https://react.dev/) Code is in `fe-apps` folder.
+- React code is accessed by Django through `templates` folder.
+- For styling, I are using [tailwindcss](https://tailwindcss.com/) & [daisyui](https://daisyui.com/).
+- For state management, I are using [zustand](https://github.com/pmndrs/zustand)
 
-### How to add new packages / libraries in development server ?
+### Workflow Description
 
-- For Node: Run `yarn add ( with -D depending on package type ) package_name/s ( with version if required )`.
-- For Python: Add `library_name/s with version` in [requirements.txt](requirements.txt) / [requirements.dev.txt](requirements.dev.txt) ( depending on library type ).
-- Run `docker-compose build --no-cache` at the root post that in both ^ cases.
+#### Authentication App
 
-### How to update the db dump ?
+- User can register using email & password.
+- User can login using email & password.
+- User can logout.
+- User can reset password using email.
 
-- Run `docker exec -i db_container_name pg_dump -U postgres -F t devdb > db.tar` for updating the dump in `db.tar` file.
-- Run `docker-compose down` and delete `db_volume` in docker.
-- Run `docker-compose up` and `docker exec -i db_container_name pg_restore -c -U postgres -d devdb  < db.tar` parallely for updating the local db.
+#### Dashboard App
 
-### Tech stack
+Authentication is required to access this app.
 
-- Docker
-- Nginx
-- Django
-- PostgreSQL
-- Webpack
-- ReactJS ( ES6 )
-- Zustand
-- TailwindCSS
-- ESLint
-- Flake8
-- Yarn
-- Git
-- Lefthook
+- User can upload pdf files.
+- User can view uploaded pdf files.
+
+#### PDF Viewer App
+
+Authentication is required to access this app.
+
+- User can view pdf files.
+- User can share pdf files with other users using email ( email may or may not be registered in the app ).
+- User can view the shared users & can revoke the access if required.
+- User can delete the pdf file.
+- User can comment on the pdf file.
+- User can reply to the comment.
+
+#### Shared PDF Viewer App
+
+- User can view pdf files.
+- User can comment on the pdf file.
+- User can reply to the comment.
+
+### Security Features
+
+- User passwords are hashed.
+- I am using token based authentication.
+- Dashboard & PdfViewer app are protected using authentication including all functionality in them.
+- Access to SharedPdfViewer app for any pdf is controlled by the owner of the pdf.
+- Pdf url is not exposed to the user in the website to prevent unauthorized access.
+- Pdf cannot be downloaded in PdfViewer or SharedPdfViewer app.

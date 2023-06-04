@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import useDashboardStore from "@utils/stores/dashboardStore.js";
 import { usePDFViewerStore } from "@utils/stores/pdfviewerStore.js";
 
-import { DeleteIcon } from "@assets/svgs.js";
+import { DeleteIcon } from "@assets/icons.js";
 
 const DeleteButton = () => {
   const { deletePDF } = useDashboardStore();
@@ -12,12 +12,14 @@ const DeleteButton = () => {
 
   return (
     <>
-      <button
-        className="btn btn-outline rounded-md w-1/5"
-        onClick={() => setShowDeleteModal(true)}
-      >
-        <DeleteIcon />
-      </button>
+      <div className="tooltip tooltip-top w-1/5" data-tip="Delete PDF">
+        <button
+          className="btn btn-outline rounded-md w-full"
+          onClick={() => setShowDeleteModal(true)}
+        >
+          <DeleteIcon />
+        </button>
+      </div>
       <dialog
         className={`modal h-screen w-screen ${showDeleteModal && "modal-open"}`}
       >

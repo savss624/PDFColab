@@ -6,7 +6,7 @@ import {
   useCommentsStore,
 } from "@utils/stores/pdfviewerStore.js";
 
-import { LoadingIcon, SendIcon, VerticalDotsIcon } from "@assets/svgs.js";
+import { LoadingIcon, SendIcon, VerticalDotsIcon } from "@assets/icons.js";
 
 import RepliesSection from "@components/pdfviewer/RepliesSection.jsx";
 
@@ -39,7 +39,7 @@ const CommentSection = () => {
         {isCommentsLoading && (
           <div className="flex flex-col items-center justify-center h-full">
             <LoadingIcon />
-            <span className="text-md">Loading...</span>
+            <span className="text-md">Loading Comments...</span>
           </div>
         )}
         {!isCommentsLoading && comments.length === 0 && (

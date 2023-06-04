@@ -25,10 +25,18 @@ from pdfviewer.serializers import (
 
 
 class PdfFileView(APIView):
+    """
+    View for getting pdf file.
+    """
+
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, id, format=None):
+        """
+        Get pdf file.
+        """
+
         pdf = Pdf.objects.get(id=id)
 
         pdf_path = os.path.join(
@@ -39,7 +47,15 @@ class PdfFileView(APIView):
 
 
 class SharedPdfFileView(APIView):
+    """
+    View for getting shared pdf file.
+    """
+
     def get(self, request, id, format=None):
+        """
+        Get shared pdf file.
+        """
+
         shared_pdf = SharedPdf.objects.get(id=id)
         pdf = shared_pdf.pdf
         pdf_path = os.path.join(
@@ -50,10 +66,18 @@ class SharedPdfFileView(APIView):
 
 
 class PdfInviteView(APIView):
+    """
+    View for inviting a viewer.
+    """
+
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
+        """
+        Invite a viewer.
+        """
+
         pdf = Pdf.objects.get(id=request.data["pdfId"])
         shared_to_email = request.data["sharedToEmail"]
         shared_to_name = request.data["sharedToName"]
@@ -105,6 +129,10 @@ class PdfInviteView(APIView):
         return Response({"sharedId": shared_pdf.id})
 
     def get(self, request, format=None):
+        """
+        Get all invited viewers.
+        """
+
         pdf_id = request.GET.get("pdf_id")
         shared_pdfs = SharedPdf.objects.filter(pdf__id=pdf_id).order_by(
             "-shared_at"
@@ -120,7 +148,15 @@ class PdfInviteView(APIView):
 
 
 class CommentsView(APIView):
+    """
+    View for comments.
+    """
+
     def post(self, request, format=None):
+        """
+        Post a comment.
+        """
+
         pdf = Pdf.objects.get(id=request.data["pdfId"])
         comment = request.data["comment"]
         name = request.data["name"]
@@ -143,6 +179,10 @@ class CommentsView(APIView):
         return Response(serializer.data)
 
     def get(self, request, format=None):
+        """
+        Get all comments along with replies.
+        """
+
         pdf_id = request.GET.get("pdf_id")
         pdf = Pdf.objects.get(id=pdf_id)
         comments_queryset = Comments.objects.filter(pdf=pdf).order_by(
@@ -158,6 +198,10 @@ class CommentsView(APIView):
         return Response({"comments": serializer.data})
 
     def delete(self, request, id, format=None):
+        """
+        Delete a comment.
+        """
+
         comment = Comments.objects.filter(id=id).first()
         comment.delete()
 
@@ -165,7 +209,15 @@ class CommentsView(APIView):
 
 
 class RepliesView(APIView):
+    """
+    View for replies.
+    """
+
     def post(self, request, format=None):
+        """
+        Post a reply.
+        """
+
         comment = Comments.objects.get(id=request.data["commentId"])
         reply = request.data["reply"]
         name = request.data["name"]
@@ -186,6 +238,10 @@ class RepliesView(APIView):
         return Response(serializer.data)
 
     def delete(self, request, id, format=None):
+        """
+        Delete a reply.
+        """
+
         reply = Replies.objects.filter(id=id).first()
         reply.delete()
 

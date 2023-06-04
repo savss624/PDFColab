@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useCommentsStore } from "@utils/stores/pdfviewerStore.js";
 
-import { VerticalDotsIcon, SendIcon } from "@assets/svgs.js";
+import { VerticalDotsIcon, SendIcon } from "@assets/icons.js";
 
 const RepliesSection = (props) => {
   const replies = props.comment.replies;

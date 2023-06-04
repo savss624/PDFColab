@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 
 import useDashboardStore from "@utils/stores/dashboardStore.js";
 
-import { LoadingIcon } from "@assets/svgs.js";
+import { LoadingIcon } from "@assets/icons.js";
 
 const UploadButton = () => {
   const { isUploadingPDF, uploadPDF } = useDashboardStore();
