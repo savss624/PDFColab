@@ -8,32 +8,32 @@ const validateEmail = (email) => {
 };
 
 const copyToClipboard = (link) => {
-  navigator.clipboard
-    .writeText(link)
-    .then(() => {
-      toast.success("Copied to clipboard");
-    })
-    .catch(() => {
-      const isSecure = window.location.protocol === "https:";
-      if (!isSecure) {
-        toast((t) => (
-          <span>
-            Clipboard access is not available in insecure sites. Please use this
-            <a
-              href={link}
-              className="link link-primary px-2"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Link
-            </a>
-            manually to visit it.
-          </span>
-        ));
-      } else {
-        toast.error("Something went wrong");
-      }
-    });
+  const isSecure = window.location.protocol === "https:";
+  if (!isSecure) {
+    toast((t) => (
+      <span>
+        Clipboard access is not available in insecure sites. Please use this
+        <a
+          href={link}
+          className="link link-primary px-2"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Link
+        </a>
+        manually to visit it.
+      </span>
+    ));
+  } else {
+    navigator.clipboard
+      .writeText(link)
+      .then(() => {
+        toast.success("Copied to clipboard");
+      })
+      .catch(() => {
+        toast.error("Failed to copy to clipboard");
+      });
+  }
 };
 
 export { validateEmail, copyToClipboard };
