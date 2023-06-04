@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { usePDFViewerStore } from "@utils/stores/pdfviewerStore.js";
+import { copyToClipboard } from "@utils/utils.js";
 
 import {
   ViewersIcon,
@@ -59,13 +60,9 @@ const ViewersButton = () => {
                   <button
                     className="btn btn-link r-0"
                     onClick={() => {
-                      navigator.clipboard
-                        .writeText(
-                          `${window.location.origin}/pdfviewer/shared/${viewer.id}`
-                        )
-                        .then(() => {
-                          toast.success("Link copied to clipboard");
-                        });
+                      copyToClipboard(
+                        `${window.location.origin}/pdfviewer/shared/${viewer.id}`
+                      );
                     }}
                   >
                     <CopyIcon />

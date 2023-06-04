@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { toast } from "react-hot-toast";
 
 import { useShareStore } from "@utils/stores/pdfviewerStore.js";
+import { copyToClipboard } from "@utils/utils.js";
 
 import { UserIcon, LinkIcon } from "@assets/icons.js";
 
@@ -94,11 +94,7 @@ const ShareButton = () => {
               className={`btn btn-sm btn-outline rounded-full w-28 flex flex-row justify-around items-center ${
                 !isInvitationSent && "btn-disabled"
               }`}
-              onClick={() =>
-                navigator.clipboard.writeText(link).then(() => {
-                  toast.success("Link copied to clipboard");
-                })
-              }
+              onClick={() => copyToClipboard(link)}
             >
               <LinkIcon />
               <span className="text-xs">Copy Link</span>
