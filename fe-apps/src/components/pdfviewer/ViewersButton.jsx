@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { toast } from "react-hot-toast";
 
 import { usePDFViewerStore } from "@utils/stores/pdfviewerStore.js";
 import { copyToClipboard } from "@utils/utils.js";

@@ -7,9 +7,9 @@ const validateEmail = (email) => {
   return emailRegex.test(email);
 };
 
-const copyToClipboard = (text) => {
+const copyToClipboard = (link) => {
   navigator.clipboard
-    .writeText(text)
+    .writeText(link)
     .then(() => {
       toast.success("Copied to clipboard");
     })
@@ -20,7 +20,7 @@ const copyToClipboard = (text) => {
           <span>
             Clipboard access is not available in insecure sites. Please use this
             <a
-              href={text}
+              href={link}
               className="link link-primary px-2"
               target="_blank"
               rel="noreferrer"
