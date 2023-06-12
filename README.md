@@ -46,13 +46,13 @@ Authentication is required to access this app.
 - User can view the shared users & can revoke the access if required.
 - User can delete the pdf file.
 - User can comment on the pdf file.
-- User can reply to the comment.
+- User can comment on the existing comment in hierarchical manner.
 
 #### Shared PDF Viewer App
 
 - User can view pdf files.
 - User can comment on the pdf file.
-- User can reply to the comment.
+- User can comment on the existing comment in hierarchical manner.
 
 ### Security Features
 
