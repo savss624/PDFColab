@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 
-import { useCommentsStore } from "@utils/stores/pdfviewerStore.js";
+import {
+  usePDFViewerStore,
+  useCommentsStore,
+} from "@utils/stores/pdfviewerStore.js";
 
 import { VerticalDotsIcon, SendIcon } from "@assets/icons.js";
 
 const RepliesSection = (props) => {
+  const { uploadedBy } = usePDFViewerStore();
   const replies = props.comment.replies;
   const { addReply, deleteReply } = useCommentsStore();
   const [repliesOpen, setRepliesOpen] = useState(false);
@@ -29,7 +33,8 @@ const RepliesSection = (props) => {
                 <div className="text-xs text-secondary">{reply.name}</div>
                 <div className="text-xs">{reply.reply}</div>
               </div>
-              {reply.email === props.user.email && (
+              {(uploadedBy.email === props.user.email ||
+                reply.email === props.user.email) && (
                 <div className="dropdown dropdown-end">
                   <label tabIndex={0}>
                     <VerticalDotsIcon />

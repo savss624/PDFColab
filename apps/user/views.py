@@ -113,7 +113,7 @@ class ForgotPasswordView(APIView):
         recipient_list = [email]
 
         html_message = render_to_string(
-            "mail/resetpassword.html",
+            "mail/reset_password.html",
             {
                 "recipient_name": user.name,
                 "reset_link": reset_link,

@@ -10,6 +10,7 @@ const usePDFViewerStore = create((set, get) => ({
   pdfId: context.pdfId,
   pdfUrl: null,
   pdfName: context.pdfName,
+  uploadedBy: context.uploadedBy || { name: "", email: "" },
   fetchPDF: () => {
     fetch(`/api/pdfviewer/getpdf/${get().pdfId}/`, {
       method: "GET",
@@ -313,7 +314,7 @@ const useCommentsStore = create((set, get) => ({
       toast.error("Please enter a reply");
       return;
     }
-    
+
     fetch("/api/pdfviewer/addreply/", {
       method: "POST",
       headers: {

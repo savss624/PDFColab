@@ -109,7 +109,12 @@ class PdfViewer(InitTemplateView):
         if pdf_id == "null":
             return
         context["pdfId"] = pdf_id
-        context["pdfName"] = Pdf.objects.get(id=pdf_id).name
+        pdf = Pdf.objects.get(id=pdf_id)
+        context["pdfName"] = pdf.name
+        context["uploadedBy"] = {
+            "name": pdf.uploaded_by.name,
+            "email": pdf.uploaded_by.email,
+        }
         return super().get_context_data(**context)
 
 
@@ -129,7 +134,10 @@ class SharedPdfViewer(InitTemplateView):
         shared_id = self.kwargs.get("sharedId")
         if shared_id == "null":
             return
-        pdf = SharedPdf.objects.get(id=shared_id).pdf
+        try:
+            pdf = SharedPdf.objects.get(id=shared_id).pdf
+        except SharedPdf.DoesNotExist:
+            return
         context["pdfId"] = pdf.id
         context["pdfName"] = pdf.name
         context["isPdfShared"] = True
@@ -140,3 +148,23 @@ class SharedPdfViewer(InitTemplateView):
             "email": sharedPdf.shared_to_email,
         }
         return super().get_context_data(**context)
+
+    def get(self, request, *args, **kwargs):
+        """
+        Check if shared access is revoked.
+        """
+
+        try:
+            shared_id = self.kwargs.get("sharedId")
+            SharedPdf.objects.get(id=shared_id)
+        except SharedPdf.DoesNotExist:
+            return redirect("access_revoked_page")
+        return super().get(request, *args, **kwargs)
+
+
+class AccessRevoked(TemplateView):
+    """
+    View for access revoked page.
+    """
+
+    template_name = "access_revoked.html"

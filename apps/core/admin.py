@@ -48,3 +48,8 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.User, UserAdmin)
+admin.site.register(models.ResetPasswordToken)
+admin.site.register(models.Pdf)
+admin.site.register(models.SharedPdf)
+admin.site.register(models.Comments)
+admin.site.register(models.Replies)

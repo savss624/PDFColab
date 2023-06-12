@@ -128,9 +128,11 @@ class Comments(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
     shared_pdf = models.ForeignKey(
-        SharedPdf, on_delete=models.CASCADE, null=True
+        SharedPdf, on_delete=models.SET_NULL, null=True
     )
-    commented_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    commented_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True
+    )
     commented_at = models.DateTimeField(auto_now_add=True)
 
 

@@ -42,6 +42,11 @@ urlpatterns = [
         views.SharedPdfViewer.as_view(),
         name="shared_pdf_viewer_page",
     ),
+    path(
+        "error/accessrevoked",
+        views.AccessRevoked.as_view(),
+        name="access_revoked_page",
+    ),
 ]
 
 if settings.DEBUG:

@@ -12,7 +12,7 @@ import RepliesSection from "@components/pdfviewer/RepliesSection.jsx";
 
 const CommentSection = () => {
   const { currentUser } = useAuthenticationStore();
-  const { isPdfShared, sharedToUser } = usePDFViewerStore();
+  const { uploadedBy, isPdfShared, sharedToUser } = usePDFViewerStore();
   const {
     comments,
     isCommentsLoading,
@@ -58,7 +58,8 @@ const CommentSection = () => {
                 <div>{comment.comment}</div>
                 <RepliesSection comment={comment} user={user} />
               </div>
-              {comment.email === user.email && (
+              {(uploadedBy.email === user.email ||
+                comment.email === user.email) && (
                 <div className="dropdown dropdown-end">
                   <label tabIndex={0}>
                     <VerticalDotsIcon />
