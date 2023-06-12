@@ -258,7 +258,7 @@ const useCommentsStore = create((set, get) => ({
           pdfId: get().pdfId,
           comment: get().comment,
           name: name,
-          email: email,
+          email: email.toLowerCase(),
           sharedId: get().sharedId,
         }),
       })
@@ -324,7 +324,7 @@ const useCommentsStore = create((set, get) => ({
         pdfId: get().pdfId,
         reply: reply,
         name: name,
-        email: email,
+        email: email.toLowerCase(),
         commentId: commentId,
         sharedId: get().sharedId,
       }),
