@@ -13,7 +13,7 @@ from core.models import Pdf
 from dashboard.serializers import PdfSerializer
 
 
-class PdfView(APIView):
+class UploadPdfView(APIView):
     """
     View for uploading a pdf.
     """
@@ -44,6 +44,15 @@ class PdfView(APIView):
             status=200,
         )
 
+
+class ListPdfView(APIView):
+    """
+    View for listing all pdfs.
+    """
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, format=None):
         """
         Get all pdfs.
@@ -55,6 +64,15 @@ class PdfView(APIView):
         serializer = PdfSerializer(pdfs, many=True)
 
         return Response(serializer.data, status=200)
+
+
+class DeletePdfView(APIView):
+    """
+    View for deleting a pdf.
+    """
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, id, format=None):
         """

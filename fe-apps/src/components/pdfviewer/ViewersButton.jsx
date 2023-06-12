@@ -51,7 +51,7 @@ const ViewersButton = () => {
                   <UserIcon />
                   <span className="mx-2">
                     {(
-                      viewer.shared_to_name + `( ${viewer.shared_to_email} )`
+                      viewer.shared_to.name + `( ${viewer.shared_to.email} )`
                     ).substring(0, 30) + "..."}
                   </span>
                 </div>

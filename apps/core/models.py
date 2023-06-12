@@ -56,6 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_external = models.BooleanField(default=False)
 
     objects = UserManager()
 
@@ -111,42 +112,25 @@ class SharedPdf(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pdf = models.ForeignKey(Pdf, on_delete=models.CASCADE)
-    shared_to_name = models.CharField(max_length=255)
-    shared_to_email = models.EmailField(max_length=255)
-    shared_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    shared_to = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="shared_to"
+    )
+    shared_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="shared_by"
+    )
     shared_at = models.DateTimeField(auto_now_add=True)
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     """
     Model for storing comments.
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    pdf = models.ForeignKey(Pdf, on_delete=models.CASCADE)
-    comment = models.TextField()
-    name = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255)
-    shared_pdf = models.ForeignKey(
-        SharedPdf, on_delete=models.SET_NULL, null=True
+    pdf = models.ForeignKey(Pdf, on_delete=models.PROTECT)
+    comment_text = models.TextField()
+    parent_comment = models.ForeignKey(
+        "self", on_delete=models.CASCADE, null=True
     )
-    commented_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True
-    )
+    commented_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     commented_at = models.DateTimeField(auto_now_add=True)
-
-
-class Replies(models.Model):
-    """
-    Model for storing replies.
-    """
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    comment = models.ForeignKey(
-        Comments, on_delete=models.CASCADE, related_name="replies"
-    )
-    reply = models.TextField()
-    name = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255)
-    replied_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    replied_at = models.DateTimeField(auto_now_add=True)

@@ -124,7 +124,7 @@ const useShareStore = create((set, get) => ({
       return;
     }
 
-    fetch(`/api/user/check?email=${email}`, {
+    fetch(`/api/user/check?email=${email.toLowerCase()}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -173,8 +173,8 @@ const useShareStore = create((set, get) => ({
           },
           body: JSON.stringify({
             pdfId: get().pdfId,
-            sharedToEmail: get().email,
-            sharedToName: get().name,
+            email: get().email.toLowerCase(),
+            name: get().name,
           }),
         })
           .then((res) => {
@@ -217,11 +217,29 @@ const useShareStore = create((set, get) => ({
 const useCommentsStore = create((set, get) => ({
   authToken: context.authToken,
   pdfId: context.pdfId,
-  comments: [],
+  commentsMap: { "": [] },
+  paginationPossibleMap: { "": false },
   isCommentsLoading: false,
-  fetchComments: () => {
-    set({ isCommentsLoading: true });
-    fetch(`/api/pdfviewer/getcomments?pdf_id=${get().pdfId}`, {
+  isMoreCommentsLoading: false,
+  fetchComments: (parentCommentId) => {
+    let url = `/api/pdfviewer/getcomments?pdf_id=${get().pdfId}`;
+    if (parentCommentId !== "") {
+      url += `&parent_comment_id=${parentCommentId}`;
+    }
+    if (
+      get().commentsMap[parentCommentId] &&
+      get().commentsMap[parentCommentId].length > 0
+    ) {
+      url += `&last_comment_id=${
+        get().commentsMap[parentCommentId][
+          get().commentsMap[parentCommentId].length - 1
+        ].id
+      }`;
+      set({ isMoreCommentsLoading: true });
+    } else if (parentCommentId === "") {
+      set({ isCommentsLoading: true });
+    }
+    fetch(url, {
       method: "GET",
     })
       .then((res) => {
@@ -231,21 +249,36 @@ const useCommentsStore = create((set, get) => ({
         throw new Error("Something went wrong");
       })
       .then((data) => {
-        set({ isCommentsLoading: false, comments: data.comments });
+        const comments = get().commentsMap[parentCommentId] || [];
+        set({
+          isCommentsLoading: false,
+          commentsMap: {
+            ...get().commentsMap,
+            [parentCommentId]: [
+              ...comments,
+              ...data.comments.map((comment) => ({
+                id: comment.id,
+                email: comment.commented_by.email,
+                name: comment.commented_by.name,
+                comment: comment.comment_text,
+              })),
+            ],
+          },
+          paginationPossibleMap: {
+            ...get().paginationPossibleMap,
+            [parentCommentId]: data.has_more,
+          },
+          isMoreCommentsLoading: false,
+        });
       })
       .catch((err) => {
         toast.error("Something went wrong");
         console.log(err);
-        set({ isCommentsLoading: false });
+        set({ isCommentsLoading: false, isMoreCommentsLoading: false });
       });
   },
-  sharedId: context.sharedId || "",
-  comment: "",
-  setComment: (comment) => {
-    set({ comment: comment });
-  },
-  addComment: ({ name, email }) => {
-    if (get().comment === "") {
+  addComment: ({ comment, email, parentCommentId, setComment }) => {
+    if (comment === "") {
       toast.error("Please enter a comment");
       return;
     } else {
@@ -256,10 +289,9 @@ const useCommentsStore = create((set, get) => ({
         },
         body: JSON.stringify({
           pdfId: get().pdfId,
-          comment: get().comment,
-          name: name,
           email: email.toLowerCase(),
-          sharedId: get().sharedId,
+          comment: comment,
+          parentCommentId: parentCommentId,
         }),
       })
         .then((res) => {
@@ -269,19 +301,25 @@ const useCommentsStore = create((set, get) => ({
           throw new Error("Something went wrong");
         })
         .then((data) => {
-          set({
-            comments: [
-              {
-                id: data.id,
-                email: data.email,
-                name: data.name,
-                comment: data.comment,
-                replies: [],
+          if (!get().commentsMap[parentCommentId]) {
+            get().fetchComments(parentCommentId);
+          } else {
+            set({
+              commentsMap: {
+                ...get().commentsMap,
+                [parentCommentId]: [
+                  {
+                    id: data.id,
+                    email: data.commented_by.email,
+                    name: data.commented_by.name,
+                    comment: data.comment_text,
+                  },
+                  ...get().commentsMap[parentCommentId],
+                ],
               },
-              ...get().comments,
-            ],
-            comment: "",
-          });
+            });
+          }
+          setComment("");
         })
         .catch((err) => {
           toast.error("Something went wrong");
@@ -289,7 +327,7 @@ const useCommentsStore = create((set, get) => ({
         });
     }
   },
-  deleteComment: (id) => {
+  deleteComment: (id, parentCommentId) => {
     fetch(`/api/pdfviewer/deletecomment/${id}/`, {
       method: "DELETE",
     })
@@ -301,87 +339,13 @@ const useCommentsStore = create((set, get) => ({
       })
       .then((data) => {
         set({
-          comments: get().comments.filter((comment) => comment.id !== id),
-        });
-      })
-      .catch((err) => {
-        toast.error("Something went wrong");
-        console.log(err);
-      });
-  },
-  addReply: ({ name, email, commentId, reply }) => {
-    if (reply === "") {
-      toast.error("Please enter a reply");
-      return;
-    }
-
-    fetch("/api/pdfviewer/addreply/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        pdfId: get().pdfId,
-        reply: reply,
-        name: name,
-        email: email.toLowerCase(),
-        commentId: commentId,
-        sharedId: get().sharedId,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error("Something went wrong");
-      })
-      .then((data) => {
-        set({
-          comments: get().comments.map((comment) => {
-            if (comment.id === commentId) {
-              return {
-                ...comment,
-                replies: [
-                  {
-                    id: data.id,
-                    email: data.email,
-                    name: data.name,
-                    reply: data.reply,
-                  },
-                  ...comment.replies,
-                ],
-              };
-            }
-            return comment;
-          }),
-        });
-      })
-      .catch((err) => {
-        toast.error("Something went wrong");
-        console.log(err);
-      });
-  },
-  deleteReply: (id, commentId) => {
-    fetch(`/api/pdfviewer/deletereply/${id}/`, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error("Something went wrong");
-      })
-      .then((data) => {
-        set({
-          comments: get().comments.map((comment) => {
-            if (comment.id === commentId) {
-              return {
-                ...comment,
-                replies: comment.replies.filter((reply) => reply.id !== id),
-              };
-            }
-            return comment;
-          }),
+          commentsMap: {
+            ...get().commentsMap,
+            [parentCommentId]: get().commentsMap[parentCommentId].filter(
+              (comment) => comment.id !== id
+            ),
+            [id]: [],
+          },
         });
       })
       .catch((err) => {

@@ -15,30 +15,26 @@ urlpatterns = [
         views.SharedPdfFileView.as_view(),
         name="get_shared_pdf",
     ),
-    path("inviteviewer/", views.PdfInviteView.as_view(), name="invite"),
+    path("inviteviewer/", views.InviteViewerView.as_view(), name="invite"),
     path(
         "getsharedviewers/",
-        views.PdfInviteView.as_view(),
+        views.SharedViewersView.as_view(),
         name="viewers",
     ),
     path(
-        "revokeaccess/<str:id>/", views.PdfInviteView.as_view(), name="revoke"
+        "revokeaccess/<str:id>/",
+        views.RevokeAccessView.as_view(),
+        name="revoke",
     ),
-    path("addcomment/", views.CommentsView.as_view(), name="add_comment"),
+    path("addcomment/", views.AddCommentView.as_view(), name="add_comment"),
     path(
         "getcomments/",
-        views.CommentsView.as_view(),
+        views.ListCommentsView.as_view(),
         name="get_comments",
     ),
     path(
         "deletecomment/<str:id>/",
-        views.CommentsView.as_view(),
+        views.DeleteCommentView.as_view(),
         name="delete_comment",
-    ),
-    path("addreply/", views.RepliesView.as_view(), name="add_reply"),
-    path(
-        "deletereply/<str:id>/",
-        views.RepliesView.as_view(),
-        name="delete_reply",
     ),
 ]

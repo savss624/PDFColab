@@ -23,7 +23,14 @@ class UserAdmin(BaseUserAdmin):
         (_("Personal Info"), {"fields": ("name",)}),
         (
             _("Permissions"),
-            {"fields": ("is_active", "is_staff", "is_superuser")},
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "is_external",
+                )
+            },
         ),
         (_("Important Dates"), {"fields": ("last_login",)}),
     )
@@ -41,6 +48,7 @@ class UserAdmin(BaseUserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
+                    "is_external",
                 ),
             },
         ),
@@ -51,5 +59,4 @@ admin.site.register(models.User, UserAdmin)
 admin.site.register(models.ResetPasswordToken)
 admin.site.register(models.Pdf)
 admin.site.register(models.SharedPdf)
-admin.site.register(models.Comments)
-admin.site.register(models.Replies)
+admin.site.register(models.Comment)

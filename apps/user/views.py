@@ -15,8 +15,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 
-from user.serializer import UserSerializer, AuthTokenSerializer
-from core.models import SharedPdf, Comments, ResetPasswordToken
+from user.serializers import UserSerializer, AuthTokenSerializer
+from core.models import ResetPasswordToken
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -30,14 +30,17 @@ class CreateUserView(generics.CreateAPIView):
         """
         Create a new user.
         """
+        User = get_user_model()
+        user = User.objects.filter(email=request.data["email"]).first()
 
-        email = request.data["email"]
-        name = request.data["name"]
-        SharedPdf.objects.filter(shared_to_email=email).update(
-            shared_to_name=name
-        )
-        Comments.objects.filter(email=email).update(name=name)
-        return super().post(request, format=None)
+        if user and user.is_external:
+            serializer = self.get_serializer(user, data=request.data)
+        else:
+            serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "User created successfully"}, status=201)
 
 
 class CreateTokenView(ObtainAuthToken):

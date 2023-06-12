@@ -1,35 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-import useAuthenticationStore from "@utils/stores/authenticationStore.js";
-import {
-  usePDFViewerStore,
-  useCommentsStore,
-} from "@utils/stores/pdfviewerStore.js";
+import { useCommentsStore } from "@utils/stores/pdfviewerStore.js";
 
-import { LoadingIcon, SendIcon, VerticalDotsIcon } from "@assets/icons.js";
+import { LoadingIcon, SendIcon } from "@assets/icons.js";
 
-import RepliesSection from "@components/pdfviewer/RepliesSection.jsx";
+import CommentContainer from "@components/pdfviewer/CommentContainer.jsx";
 
-const CommentSection = () => {
-  const { currentUser } = useAuthenticationStore();
-  const { uploadedBy, isPdfShared, sharedToUser } = usePDFViewerStore();
-  const {
-    comments,
-    isCommentsLoading,
-    fetchComments,
-    comment,
-    setComment,
-    addComment,
-    deleteComment,
-  } = useCommentsStore();
-  const [user, setUser] = useState(isPdfShared ? sharedToUser : currentUser);
+const CommentSection = (props) => {
+  const { commentsMap, isCommentsLoading, fetchComments, addComment } =
+    useCommentsStore();
+  const [comment, setComment] = useState("");
+
+  const parentCommentId = "";
+  const comments = commentsMap[parentCommentId];
 
   useEffect(() => {
-    setUser(isPdfShared ? sharedToUser : currentUser);
-  }, [isPdfShared, sharedToUser, currentUser, user]);
-
-  useEffect(() => {
-    fetchComments();
+    fetchComments(parentCommentId);
   }, [fetchComments]);
 
   return (
@@ -47,43 +33,22 @@ const CommentSection = () => {
             No comments yet. Be the first to comment!
           </span>
         )}
-        <div className="flex flex-col overflow-auto hide-scrollbar">
-          {comments.map((comment) => (
-            <div
-              key={comment.id}
-              className="bg-base-300 p-4 rounded-md my-2 flex flex-row justify-between items-start"
-            >
-              <div className="flex flex-col">
-                <div className="text-xs text-secondary">{comment.name}</div>
-                <div>{comment.comment}</div>
-                <RepliesSection comment={comment} user={user} />
-              </div>
-              {(uploadedBy.email === user.email ||
-                comment.email === user.email) && (
-                <div className="dropdown dropdown-end">
-                  <label tabIndex={0}>
-                    <VerticalDotsIcon />
-                  </label>
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content menu shadow bg-base-100 rounded-box border"
-                  >
-                    <li>
-                      <button onClick={() => deleteComment(comment.id)}>
-                        Delete
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <CommentContainer
+          comments={comments}
+          user={props.user}
+          uploadedBy={props.uploadedBy}
+          parentCommentId={parentCommentId}
+        />
         <form
           className="flex flex-row justify-center items-center"
           onSubmit={(e) => {
             e.preventDefault();
-            addComment(user);
+            addComment({
+              comment: comment,
+              ...props.user,
+              parentCommentId: "",
+              setComment: setComment,
+            });
           }}
         >
           <input
@@ -91,7 +56,6 @@ const CommentSection = () => {
             placeholder="Add a comment..."
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            onKey
           ></input>
           <button className="btn btn-outline" type="submit">
             <SendIcon />

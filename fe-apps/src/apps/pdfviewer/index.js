@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import Init from "@components/common/Init.jsx";
 
+import useAuthenticationStore from "@utils/stores/authenticationStore.js";
 import { usePDFViewerStore } from "@utils/stores/pdfviewerStore.js";
 import { context } from "@utils/constants.js";
 
@@ -13,7 +14,14 @@ import DeleteButton from "@components/pdfviewer/DeleteButton.jsx";
 import CommentSection from "@components/pdfviewer/CommentSection.jsx";
 
 const App = () => {
-  const { fetchPDF, isPdfShared, fetchSharedPDF } = usePDFViewerStore();
+  const { currentUser } = useAuthenticationStore();
+  const { fetchPDF, uploadedBy, fetchSharedPDF, isPdfShared, sharedToUser } =
+    usePDFViewerStore();
+
+  const [user, setUser] = useState(isPdfShared ? sharedToUser : currentUser);
+  useEffect(() => {
+    setUser(isPdfShared ? sharedToUser : currentUser);
+  }, [isPdfShared, sharedToUser, currentUser, user]);
 
   useEffect(() => {
     if (isPdfShared) fetchSharedPDF();
@@ -42,7 +50,7 @@ const App = () => {
               <DeleteButton />
             </div>
           )}
-          <CommentSection />
+          <CommentSection user={user} uploadedBy={uploadedBy} />
         </div>
       </div>
     </div>

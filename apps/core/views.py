@@ -144,8 +144,8 @@ class SharedPdfViewer(InitTemplateView):
         context["sharedId"] = shared_id
         sharedPdf = SharedPdf.objects.get(id=shared_id)
         context["sharedToUser"] = {
-            "name": sharedPdf.shared_to_name,
-            "email": sharedPdf.shared_to_email,
+            "name": sharedPdf.shared_to.name,
+            "email": sharedPdf.shared_to.email,
         }
         return super().get_context_data(**context)
 
