@@ -32,6 +32,10 @@ class UserSerializer(serializers.ModelSerializer):
         password = validated_data.pop("password", None)
         user = super().update(instance, validated_data)
 
+        if user.is_external:
+            user.is_external = False
+            user.save()
+
         if password:
             user.set_password(password)
             user.save()
