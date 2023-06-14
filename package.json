@@ -1,7 +1,7 @@
 {
   "name": "pdfcolab",
   "version": "1.0.0",
-  "description": "",
+  "description": "PDF Management & Collaboration System",
   "main": "index.js",
   "scripts": {
     "dev:django-tailwind": "tailwindcss -c ./tailwind.config.django.js -i fe-apps/src/styles/tailwind.css -o ./build/css/tailwind.django.css --watch",
@@ -12,7 +12,7 @@
     "build": "cross-env NODE_ENV=production concurrently 'yarn:prod:*'"
   },
   "keywords": [],
-  "author": "",
+  "author": "savss624",
   "license": "ISC",
   "dependencies": {
     "react": "^18.2.0",

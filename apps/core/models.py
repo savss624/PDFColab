@@ -17,7 +17,7 @@ from django.utils import timezone
 
 class UserManager(BaseUserManager):
     """
-    Manager for Users
+    Manager for Users.
     """
 
     def create_user(self, email, password=None, **extra_fields):
@@ -108,7 +108,9 @@ class Pdf(models.Model):
 
 
 class SharedPdf(models.Model):
-    """Model for storing shared pdfs."""
+    """
+    Model for storing shared pdfs.
+    """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pdf = models.ForeignKey(Pdf, on_delete=models.CASCADE)

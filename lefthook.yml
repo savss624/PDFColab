@@ -6,4 +6,4 @@ pre-commit:
       run: yarn eslint --config .eslintrc.js {staged_files}
     backend-linter:
       glob: "*.py"
-      run: flake8  --config .flake8 {staged_files}
+      run: flake8 --config .flake8 {staged_files}

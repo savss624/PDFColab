@@ -15,7 +15,7 @@ Website: [Link](http://ec2-18-142-54-33.ap-southeast-1.compute.amazonaws.com)
 
 - Backend [django](https://www.djangoproject.com/) code is in `apps` folder.
 - Django settings are in `config` folder.
-- Frontend [react](https://react.dev/) Code is in `fe-apps` folder.
+- Frontend [react](https://react.dev/) code is in `fe-apps` folder.
 - React code is accessed by Django through `templates` folder.
 - For styling, I are using [tailwindcss](https://tailwindcss.com/) & [daisyui](https://daisyui.com/).
 - For state management, I are using [zustand](https://github.com/pmndrs/zustand)
